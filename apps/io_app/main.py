@@ -30,10 +30,6 @@ _DATA_DIR = os.getenv("IO_DATA_DIR", os.path.join(os.path.dirname(os.path.abspat
 os.makedirs(_DATA_DIR, exist_ok=True)
 _IO_FILE = os.path.join(_DATA_DIR, "io_blob.bin")
 
-MAX_DELAY_MS = int(os.getenv("MAX_DELAY_MS", "10000"))
-MAX_FILE_MB = int(os.getenv("MAX_FILE_MB", "512"))
-
-
 def _ensure_blob(size_mb):
     path = f"{_IO_FILE}.{size_mb}"
     if not os.path.exists(path) or os.path.getsize(path) != size_mb * 1024 * 1024:
@@ -74,8 +70,8 @@ def stats():
 
 @app.get("/work")
 async def work(delay_ms: int = 50, file_mb: int = 0):
-    delay_ms = max(0, min(delay_ms, MAX_DELAY_MS))
-    file_mb = max(0, min(file_mb, MAX_FILE_MB))
+    delay_ms = max(0, delay_ms)
+    file_mb = max(0, file_mb)
     t0 = time.perf_counter()
     read = await _io_work(delay_ms, file_mb)
     return {

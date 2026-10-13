@@ -56,12 +56,9 @@ def stats():
     }
 
 
-MAX_SIZE = int(os.getenv("MAX_SIZE", "800"))
-
-
 @app.get("/work")
 def work(size: int = 150):
-    size = max(1, min(size, MAX_SIZE))
+    size = max(1, size)
     t0 = time.perf_counter()
     _matmul(size)
     return {"profile": "cpu-bound", "size": size, "compute_ms": round((time.perf_counter() - t0) * 1000, 2)}

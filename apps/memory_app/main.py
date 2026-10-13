@@ -61,12 +61,9 @@ def stats():
     }
 
 
-MAX_MB = int(os.getenv("MAX_MB", "1024"))
-
-
 @app.get("/work")
 def work(mb: int = 128):
-    mb = max(1, min(mb, MAX_MB))
+    mb = max(1, mb)
     t0 = time.perf_counter()
     _mem_work(mb)
     return {"profile": "memory-bound", "mb": mb, "compute_ms": round((time.perf_counter() - t0) * 1000, 2)}
