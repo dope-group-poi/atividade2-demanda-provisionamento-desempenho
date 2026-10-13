@@ -28,7 +28,7 @@ curl "http://localhost:8001/work?size=150"
 1. Para cada cenario de provisionamento:
 
    ```bash
-   APP=cpu URL=http://192.168.56.10:8001 SCENARIO=c1_1vcpu_1gb \
+   APP=cpu URL=http://localhost:8001 SCENARIO=c1_1vcpu_1gb \
      ./experiments/run_scenarios.sh
    ```
 
