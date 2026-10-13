@@ -61,12 +61,21 @@ def stats():
     }
 
 
+MAX_MB = int(os.getenv("MAX_MB", "1024"))
+
+
 @app.get("/work")
 def work(mb: int = 128):
+    mb = max(1, min(mb, MAX_MB))
     t0 = time.perf_counter()
     _mem_work(mb)
     return {"profile": "memory-bound", "mb": mb, "compute_ms": round((time.perf_counter() - t0) * 1000, 2)}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8002")))
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "8002")),
+        workers=int(os.getenv("WORKERS", "1")),
+    )

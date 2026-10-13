@@ -56,12 +56,21 @@ def stats():
     }
 
 
+MAX_SIZE = int(os.getenv("MAX_SIZE", "800"))
+
+
 @app.get("/work")
 def work(size: int = 150):
+    size = max(1, min(size, MAX_SIZE))
     t0 = time.perf_counter()
     _matmul(size)
     return {"profile": "cpu-bound", "size": size, "compute_ms": round((time.perf_counter() - t0) * 1000, 2)}
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8001")))
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "8001")),
+        workers=int(os.getenv("WORKERS", "1")),
+    )
