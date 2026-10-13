@@ -9,3 +9,5 @@ apps/io_app/data/
 *.bin.*
 
 results/tmp/
+
+.env
