@@ -1,0 +1,42 @@
+name: poi
+
+x-app: &app
+  restart: unless-stopped
+  environment:
+    WORKERS: ${WORKERS:-1}
+
+services:
+  cpu_app:
+    <<: *app
+    image: ${DH_USER:-pedrobraz}/poi-cpu-app:${TAG:-1.0}
+    container_name: poi-cpu-app
+    ports:
+      - "9001:8001"
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 256M }
+
+  memory_app:
+    <<: *app
+    image: ${DH_USER:-pedrobraz}/poi-memory-app:${TAG:-1.0}
+    container_name: poi-memory-app
+    ports:
+      - "9002:8002"
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 640M }
+
+  io_app:
+    <<: *app
+    image: ${DH_USER:-pedrobraz}/poi-io-app:${TAG:-1.0}
+    container_name: poi-io-app
+    ports:
+      - "9003:8003"
+    volumes:
+      - io_data:/data
+    deploy:
+      resources:
+        limits: { cpus: "1.0", memory: 256M }
+
+volumes:
+  io_data:
